@@ -1,0 +1,17 @@
+$ python3 --version
+Python 3.14.2
+[código de saída: 0]
+
+$ docker version --format "Docker cliente {{.Client.Version}} / servidor {{.Server.Version}}"
+Docker cliente 29.8.0-1 / servidor 29.8.0-1
+[código de saída: 0]
+
+$ minikube version
+minikube version: v1.39.0
+commit: 7a9f6a841470a207de8cf4bafcccee0969d8ba10
+[código de saída: 0]
+
+$ bash -c ". /etc/os-release; echo "Sistema: $PRETTY_NAME""
+Sistema: Ubuntu 24.04.5 LTS
+[código de saída: 0]
+
