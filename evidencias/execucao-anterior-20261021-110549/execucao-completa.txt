@@ -1,0 +1,35 @@
+
+[32m========================================================================
+  Preparando o ambiente
+========================================================================[0m
+OK
+
+[32m========================================================================
+  Etapa 1 | Conferência inicial
+========================================================================[0m
+[36m$ python3 --version[0m
+Python 3.14.2
+[36m$ docker version --format "Docker cliente {{.Client.Version}} / servidor {{.Server.Version}}"[0m
+Docker cliente 29.8.0-1 / servidor 29.8.0-1
+[36m$ minikube version[0m
+minikube version: v1.39.0
+commit: 7a9f6a841470a207de8cf4bafcccee0969d8ba10
+[36m$ bash -c ". /etc/os-release; echo "Sistema: $PRETTY_NAME""[0m
+Sistema: Ubuntu 24.04.5 LTS
+[36m$ minikube -p devops-k8s start --driver=docker --cpus=2 --memory=2048[0m
+* [devops-k8s] minikube v1.39.0 on Ubuntu 24.04 (docker/amd64)
+* Using the docker driver based on existing profile
+* Starting "devops-k8s" primary control-plane node in "devops-k8s" cluster
+* Pulling base image v0.0.51 ...
+! Failing to connect to https://registry.k8s.io/ from inside the minikube container
+* To pull new external images, you may need to configure a proxy: https://minikube.sigs.k8s.io/docs/reference/networking/proxy/
+* Preparing Kubernetes v1.37.0 on containerd 2.3.4 ...
+* Verifying Kubernetes components...
+  - Using image gcr.io/k8s-minikube/storage-provisioner:v5
+* Enabled addons: storage-provisioner, default-storageclass
+* Done! kubectl is now configured to use "devops-k8s" cluster and "default" namespace by default
+[36m$ ./scripts/kube.sh wait --for=condition=Ready node --all --timeout=180s[0m
+error: timed out waiting for the condition on nodes/devops-k8s
+
+[31mERRO: O comando falhou (código 1): ./scripts/kube.sh wait --for=condition=Ready node --all --timeout=180s[0m
+[31mOs registros até aqui estão em evidencias/. Mande a pasta para análise.[0m

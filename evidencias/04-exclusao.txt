@@ -1,0 +1,4 @@
+$ ./scripts/kube.sh delete pod entrega-5c8cd478b5-7ftfq --wait=true
+pod "entrega-5c8cd478b5-7ftfq" deleted from aula-k8s namespace
+[código de saída: 0]
+

@@ -1,0 +1,22 @@
+Listening on :8000; version=quebrada; pod=entrega-cb5c65f86-zhqg8
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /healthz HTTP/1.1" 200 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /healthz HTTP/1.1" 200 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /healthz HTTP/1.1" 200 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /healthz HTTP/1.1" 200 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /healthz HTTP/1.1" 200 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /healthz HTTP/1.1" 200 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /healthz HTTP/1.1" 200 -
+pod=entrega-cb5c65f86-zhqg8 version=quebrada "GET /readyz HTTP/1.1" 503 -

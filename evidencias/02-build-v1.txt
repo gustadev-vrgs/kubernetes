@@ -1,0 +1,75 @@
+$ docker build --build-arg APP_VERSION=v1 -t entrega-local:v1 .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 287B 0.0s done
+#1 DONE 0.0s
+
+#2 [auth] library/python:pull token for registry-1.docker.io
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.12-slim
+#3 DONE 0.6s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.1s
+
+#5 [internal] load build context
+#5 transferring context: 4.09kB done
+#5 DONE 0.1s
+
+#6 [1/3] FROM docker.io/library/python:3.12-slim@sha256:2259debdc6af85626058a15a7bf44ad6a68b8c98c9ae82a02cf5cdb92f096d47
+#6 resolve docker.io/library/python:3.12-slim@sha256:2259debdc6af85626058a15a7bf44ad6a68b8c98c9ae82a02cf5cdb92f096d47 0.1s done
+#6 DONE 0.2s
+
+#6 [1/3] FROM docker.io/library/python:3.12-slim@sha256:2259debdc6af85626058a15a7bf44ad6a68b8c98c9ae82a02cf5cdb92f096d47
+#6 sha256:5c397e4307db7bd392eff1d36de88b04da2a137a4b906b7e0e4657bada560645 249B / 249B 0.0s done
+#6 sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 1.29MB / 1.29MB 0.1s done
+#6 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 8.39MB / 12.12MB 0.2s
+#6 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 12.12MB / 12.12MB 0.3s
+#6 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 5.24MB / 29.84MB 0.2s
+#6 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 18.87MB / 29.84MB 0.3s
+#6 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 28.31MB / 29.84MB 0.5s
+#6 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 29.84MB / 29.84MB 0.6s
+#6 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 12.12MB / 12.12MB 1.2s done
+#6 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 29.84MB / 29.84MB 1.2s done
+#6 extracting sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034
+#6 extracting sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 1.3s done
+#6 DONE 2.8s
+
+#6 [1/3] FROM docker.io/library/python:3.12-slim@sha256:2259debdc6af85626058a15a7bf44ad6a68b8c98c9ae82a02cf5cdb92f096d47
+#6 extracting sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c
+#6 extracting sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 0.2s done
+#6 DONE 3.0s
+
+#6 [1/3] FROM docker.io/library/python:3.12-slim@sha256:2259debdc6af85626058a15a7bf44ad6a68b8c98c9ae82a02cf5cdb92f096d47
+#6 extracting sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7
+#6 extracting sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 0.7s done
+#6 DONE 3.7s
+
+#6 [1/3] FROM docker.io/library/python:3.12-slim@sha256:2259debdc6af85626058a15a7bf44ad6a68b8c98c9ae82a02cf5cdb92f096d47
+#6 extracting sha256:5c397e4307db7bd392eff1d36de88b04da2a137a4b906b7e0e4657bada560645 0.0s done
+#6 DONE 3.7s
+
+#7 [2/3] WORKDIR /app
+#7 DONE 2.6s
+
+#8 [3/3] COPY app/main.py /app/main.py
+#8 DONE 0.1s
+
+#9 exporting to image
+#9 exporting layers
+#9 exporting layers 0.2s done
+#9 exporting manifest sha256:9b94c96bd8b75b810f139a260cb69d15f7214456992506c91193dd0ba7da6589 0.0s done
+#9 exporting config sha256:11df266415efc6690ef5c577650a63fd25c0739f78528ea0b42bc7058f362cc3 0.0s done
+#9 exporting attestation manifest sha256:0d5db81fec1d450d8b8208d9bd67549dda3ee8952edbd9cdbed1c1b808178b6d 0.0s done
+#9 exporting manifest list sha256:d5778736ffb9b79d3ec87a989191ce8c30a8e737a49607dbca08e0047379e477 0.0s done
+#9 naming to docker.io/library/entrega-local:v1 done
+#9 unpacking to docker.io/library/entrega-local:v1 0.0s done
+#9 DONE 0.3s
+[código de saída: 0]
+
+$ minikube -p devops-k8s image load entrega-local:v1
+[código de saída: 0]
+

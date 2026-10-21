@@ -16,16 +16,825 @@ minikube version: v1.39.0
 commit: 7a9f6a841470a207de8cf4bafcccee0969d8ba10
 [36m$ bash -c ". /etc/os-release; echo "Sistema: $PRETTY_NAME""[0m
 Sistema: Ubuntu 24.04.5 LTS
-[36m$ minikube -p devops-k8s start --driver=docker --cpus=2 --memory=2048[0m
+[36m$ minikube -p devops-k8s start --driver=docker --cpus=2 --memory=2048 --container-runtime=docker[0m
 * [devops-k8s] minikube v1.39.0 on Ubuntu 24.04 (docker/amd64)
-* Using the docker driver based on existing profile
+* Using the docker driver based on user configuration
+* Using Docker driver with root privileges
 * Starting "devops-k8s" primary control-plane node in "devops-k8s" cluster
 * Pulling base image v0.0.51 ...
+* Downloading Kubernetes v1.37.0 preload ...
 ! Failing to connect to https://registry.k8s.io/ from inside the minikube container
 * To pull new external images, you may need to configure a proxy: https://minikube.sigs.k8s.io/docs/reference/networking/proxy/
-* Preparing Kubernetes v1.37.0 on containerd 2.3.4 ...
+* Configuring bridge CNI (Container Networking Interface) ...
 * Verifying Kubernetes components...
   - Using image gcr.io/k8s-minikube/storage-provisioner:v5
-* Enabled addons: storage-provisioner, default-storageclass
+* Enabled addons: default-storageclass, storage-provisioner
 * Done! kubectl is now configured to use "devops-k8s" cluster and "default" namespace by default
 [36m$ ./scripts/kube.sh wait --for=condition=Ready node --all --timeout=180s[0m
+node/devops-k8s condition met
+[36m$ ./scripts/kube.sh get nodes -o wide[0m
+NAME         STATUS   ROLES           AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE                         KERNEL-VERSION             CONTAINER-RUNTIME
+devops-k8s   Ready    control-plane   7s    v1.37.0   192.168.49.2   <none>        Debian GNU/Linux 12 (bookworm)   6.8.0-1064-azure (amd64)   docker://29.7.2
+[36m$ ./scripts/kube.sh version[0m
+Client Version: v1.37.0
+Kustomize Version: v5.8.1
+Server Version: v1.37.0
+[36m$ ./scripts/kube.sh delete namespace aula-k8s --ignore-not-found=true --wait=true[0m
+Warning: deleting cluster-scoped resources, not scoped to the provided namespace
+[36m$ python3 -m unittest discover -s tests -v[0m
+test_broken_alive (test_app.AppTests.test_broken_alive) ... pod=p version=quebrada "GET /healthz HTTP/1.1" 200 -
+ok
+test_broken_api (test_app.AppTests.test_broken_api) ... pod=p version=quebrada "GET /api/status HTTP/1.1" 503 -
+ok
+test_broken_readiness (test_app.AppTests.test_broken_readiness) ... pod=p version=quebrada "GET /readyz HTTP/1.1" 503 -
+ok
+test_html_escaping (test_app.AppTests.test_html_escaping) ... pod=<pod> version=v1 "GET / HTTP/1.1" 200 -
+ok
+test_readiness_healthy (test_app.AppTests.test_readiness_healthy) ... pod=p version=v1 "GET /readyz HTTP/1.1" 200 -
+ok
+test_status_v1 (test_app.AppTests.test_status_v1) ... pod=pod-1 version=v1 "GET /api/status HTTP/1.1" 200 -
+ok
+test_status_v2 (test_app.AppTests.test_status_v2) ... pod=pod-2 version=v2 "GET /api/status HTTP/1.1" 200 -
+ok
+test_unknown (test_app.AppTests.test_unknown) ... pod=p version=v1 "GET /inexistente HTTP/1.1" 404 -
+ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.464s
+
+OK
+
+[32m========================================================================
+  Etapa 2 | Primeira publicação (v1)
+========================================================================[0m
+[36m$ docker build --build-arg APP_VERSION=v1 -t entrega-local:v1 .[0m
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 287B 0.0s done
+#1 DONE 0.0s
+
+#2 [auth] library/python:pull token for registry-1.docker.io
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.12-slim
+#3 DONE 0.6s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.1s
+
+#5 [internal] load build context
+#5 transferring context: 4.09kB done
+#5 DONE 0.1s
+
+#6 [1/3] FROM docker.io/library/python:3.12-slim@sha256:2259debdc6af85626058a15a7bf44ad6a68b8c98c9ae82a02cf5cdb92f096d47
+#6 resolve docker.io/library/python:3.12-slim@sha256:2259debdc6af85626058a15a7bf44ad6a68b8c98c9ae82a02cf5cdb92f096d47 0.1s done
+#6 DONE 0.2s
+
+#6 [1/3] FROM docker.io/library/python:3.12-slim@sha256:2259debdc6af85626058a15a7bf44ad6a68b8c98c9ae82a02cf5cdb92f096d47
+#6 sha256:5c397e4307db7bd392eff1d36de88b04da2a137a4b906b7e0e4657bada560645 249B / 249B 0.0s done
+#6 sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 1.29MB / 1.29MB 0.1s done
+#6 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 8.39MB / 12.12MB 0.2s
+#6 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 12.12MB / 12.12MB 0.3s
+#6 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 5.24MB / 29.84MB 0.2s
+#6 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 18.87MB / 29.84MB 0.3s
+#6 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 28.31MB / 29.84MB 0.5s
+#6 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 29.84MB / 29.84MB 0.6s
+#6 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 12.12MB / 12.12MB 1.2s done
+#6 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 29.84MB / 29.84MB 1.2s done
+#6 extracting sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034
+#6 extracting sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 1.3s done
+#6 DONE 2.8s
+
+#6 [1/3] FROM docker.io/library/python:3.12-slim@sha256:2259debdc6af85626058a15a7bf44ad6a68b8c98c9ae82a02cf5cdb92f096d47
+#6 extracting sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c
+#6 extracting sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 0.2s done
+#6 DONE 3.0s
+
+#6 [1/3] FROM docker.io/library/python:3.12-slim@sha256:2259debdc6af85626058a15a7bf44ad6a68b8c98c9ae82a02cf5cdb92f096d47
+#6 extracting sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7
+#6 extracting sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 0.7s done
+#6 DONE 3.7s
+
+#6 [1/3] FROM docker.io/library/python:3.12-slim@sha256:2259debdc6af85626058a15a7bf44ad6a68b8c98c9ae82a02cf5cdb92f096d47
+#6 extracting sha256:5c397e4307db7bd392eff1d36de88b04da2a137a4b906b7e0e4657bada560645 0.0s done
+#6 DONE 3.7s
+
+#7 [2/3] WORKDIR /app
+#7 DONE 2.6s
+
+#8 [3/3] COPY app/main.py /app/main.py
+#8 DONE 0.1s
+
+#9 exporting to image
+#9 exporting layers
+#9 exporting layers 0.2s done
+#9 exporting manifest sha256:9b94c96bd8b75b810f139a260cb69d15f7214456992506c91193dd0ba7da6589 0.0s done
+#9 exporting config sha256:11df266415efc6690ef5c577650a63fd25c0739f78528ea0b42bc7058f362cc3 0.0s done
+#9 exporting attestation manifest sha256:0d5db81fec1d450d8b8208d9bd67549dda3ee8952edbd9cdbed1c1b808178b6d 0.0s done
+#9 exporting manifest list sha256:d5778736ffb9b79d3ec87a989191ce8c30a8e737a49607dbca08e0047379e477 0.0s done
+#9 naming to docker.io/library/entrega-local:v1 done
+#9 unpacking to docker.io/library/entrega-local:v1 0.0s done
+#9 DONE 0.3s
+[36m$ minikube -p devops-k8s image load entrega-local:v1[0m
+[36m$ docker image ls entrega-local[0m
+IMAGE              ID             DISK USAGE   CONTENT SIZE   EXTRA
+entrega-local:v1   d5778736ffb9        177MB         43.3MB        
+[36m$ minikube -p devops-k8s image ls[0m
+registry.k8s.io/pause:3.10.2
+registry.k8s.io/kube-scheduler:v1.37.0
+registry.k8s.io/kube-proxy:v1.37.0
+registry.k8s.io/kube-controller-manager:v1.37.0
+registry.k8s.io/kube-apiserver:v1.37.0
+registry.k8s.io/etcd:3.7.0-0
+registry.k8s.io/coredns/coredns:v1.14.6
+gcr.io/k8s-minikube/storage-provisioner:v5
+docker.io/library/entrega-local:v1
+[36m$ ./scripts/kube.sh apply -f k8s/namespace.yaml[0m
+namespace/aula-k8s created
+[36m$ ./scripts/kube.sh apply -f k8s/configmap.yaml[0m
+configmap/entrega-config created
+[36m$ ./scripts/kube.sh apply -f k8s/service.yaml[0m
+service/entrega created
+[36m$ python3 scripts/render.py v1 --replicas 2 --output build/deployment.yaml[0m
+[36m$ ./scripts/kube.sh apply --dry-run=server -f build/deployment.yaml[0m
+deployment.apps/entrega created (server dry run)
+[36m$ ./scripts/kube.sh apply -f build/deployment.yaml[0m
+deployment.apps/entrega created
+[36m$ ./scripts/kube.sh rollout status deployment/entrega --timeout=120s[0m
+Waiting for deployment "entrega" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "entrega" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "entrega" rollout to finish: 0 of 2 updated replicas are available...
+deployment "entrega" successfully rolled out
+[36m$ ./scripts/kube.sh get pods -l app=entrega -o wide[0m
+NAME                       READY   STATUS    RESTARTS   AGE   IP           NODE         NOMINATED NODE   READINESS GATES
+entrega-5c8cd478b5-csnnj   1/1     Running   0          7s    10.244.0.4   devops-k8s   <none>           <none>
+entrega-5c8cd478b5-hvtpd   1/1     Running   0          7s    10.244.0.3   devops-k8s   <none>           <none>
+
+[32m========================================================================
+  Etapa 3 | Acesso e verificação
+========================================================================[0m
+[36m$ ./scripts/kube.sh port-forward service/entrega 8080:80   (em segundo plano)[0m
+[36m$ curl -sS http://127.0.0.1:8080/api/status[0m
+{"version": "v1", "message": "Entrega v1 publicada pelo grupo.", "pod": "entrega-5c8cd478b5-csnnj", "ready": true}
+[36m$ curl -i -sS http://127.0.0.1:8080/readyz[0m
+HTTP/1.0 200 OK
+Server: BaseHTTP/0.6 Python/3.12.15
+Date: Wed, 21 Oct 2026 11:07:32 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 15
+Cache-Control: no-store
+
+{"ready": true}
+[36m$ python3 scripts/smoke.py http://127.0.0.1:8080 --version v1 --output evidencias/v1-status.json[0m
+{"version": "v1", "message": "Entrega v1 publicada pelo grupo.", "pod": "entrega-5c8cd478b5-csnnj", "ready": true}
+SMOKE OK
+[36m$ curl -sS -o evidencias/pagina-v1.html http://127.0.0.1:8080/[0m
+
+[35m  >>> PRINT DO NAVEGADOR (versão v1) <<<[0m
+[35m  1. Abra este endereço (Ctrl+clique):[0m
+       https://zany-fishstick-wr6v64pjg6p92g647-8080.app.github.dev
+[35m     Se não abrir, use a aba PORTAS, porta 8080, ícone do globo.[0m
+[35m  2. Tecle Win+Shift+S, capture a página e salve no SEU computador como:[0m
+       Desktop\devops_kubernetes\evidencias\print-v1.png
+  3. Depois de salvar, pressione Enter aqui para continuar 
+  
+[32m========================================================================
+  Etapa 4 | Réplicas: de 2 para 3 e exclusão de um Pod
+========================================================================[0m
+[36m$ python3 scripts/render.py v1 --replicas 3 --output build/deployment.yaml[0m
+[36m$ ./scripts/kube.sh apply -f build/deployment.yaml[0m
+deployment.apps/entrega configured
+[36m$ ./scripts/kube.sh rollout status deployment/entrega --timeout=120s[0m
+Waiting for deployment "entrega" rollout to finish: 2 of 3 updated replicas are available...
+Waiting for deployment "entrega" rollout to finish: 2 of 3 updated replicas are available...
+deployment "entrega" successfully rolled out
+[36m$ ./scripts/kube.sh get pods -l app=entrega[0m
+NAME                       READY   STATUS    RESTARTS   AGE
+entrega-5c8cd478b5-7ftfq   1/1     Running   0          5s
+entrega-5c8cd478b5-csnnj   1/1     Running   0          59s
+entrega-5c8cd478b5-hvtpd   1/1     Running   0          59s
+[36m$ ./scripts/kube.sh delete pod entrega-5c8cd478b5-7ftfq --wait=true[0m
+pod "entrega-5c8cd478b5-7ftfq" deleted from aula-k8s namespace
+Aguardando 3 Pods prontos...
+[36m$ ./scripts/kube.sh get pods -l app=entrega -o wide[0m
+NAME                       READY   STATUS    RESTARTS   AGE   IP           NODE         NOMINATED NODE   READINESS GATES
+entrega-5c8cd478b5-csnnj   1/1     Running   0          73s   10.244.0.4   devops-k8s   <none>           <none>
+entrega-5c8cd478b5-gs49k   1/1     Running   0          11s   10.244.0.6   devops-k8s   <none>           <none>
+entrega-5c8cd478b5-hvtpd   1/1     Running   0          73s   10.244.0.3   devops-k8s   <none>           <none>
+
+[32m========================================================================
+  Etapa 5 | ConfigMap: mudar a mensagem sem reconstruir a imagem
+========================================================================[0m
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: entrega-config
+  namespace: aula-k8s
+data:
+  APP_MESSAGE: "Entrega configurada pelo grupo."
+[36m$ ./scripts/kube.sh apply -f k8s/configmap.yaml[0m
+configmap/entrega-config configured
+[36m$ ./scripts/kube.sh port-forward service/entrega 8080:80   (em segundo plano)[0m
+[36m$ curl -sS http://127.0.0.1:8080/api/status[0m
+{"version": "v1", "message": "Entrega v1 publicada pelo grupo.", "pod": "entrega-5c8cd478b5-csnnj", "ready": true}
+[36m$ ./scripts/kube.sh rollout restart deployment/entrega[0m
+deployment.apps/entrega restarted
+[36m$ ./scripts/kube.sh rollout status deployment/entrega --timeout=120s[0m
+Waiting for deployment "entrega" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "entrega" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "entrega" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "entrega" rollout to finish: 1 old replicas are pending termination...
+deployment "entrega" successfully rolled out
+[36m$ ./scripts/kube.sh get pods -l app=entrega[0m
+NAME                       READY   STATUS        RESTARTS   AGE
+entrega-5c8cd478b5-hvtpd   0/1     Terminating   0          92s
+entrega-5fff6b6444-f5n7h   1/1     Running       0          17s
+entrega-5fff6b6444-vqfnl   1/1     Running       0          11s
+entrega-5fff6b6444-zwts7   1/1     Running       0          6s
+[36m$ ./scripts/kube.sh port-forward service/entrega 8080:80   (em segundo plano)[0m
+[36m$ python3 scripts/smoke.py http://127.0.0.1:8080 --version v1 --message "Entrega configurada pelo grupo." --output evidencias/config-status.json[0m
+{"version": "v1", "message": "Entrega configurada pelo grupo.", "pod": "entrega-5fff6b6444-f5n7h", "ready": true}
+SMOKE OK
+
+[32m========================================================================
+  Etapa 6 | Nova versão (v2)
+========================================================================[0m
+[36m$ docker build --build-arg APP_VERSION=v2 -t entrega-local:v2 .[0m
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 287B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 DONE 0.2s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 114B done
+#4 DONE 0.0s
+
+#5 [1/3] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#5 resolve docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2 0.0s done
+#5 DONE 0.0s
+
+#6 [2/3] WORKDIR /app
+#6 CACHED
+
+#7 [3/3] COPY app/main.py /app/main.py
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:457dc355e10967468f42576150e2c685b96927ef3a41b0c6340ef1e9d9ed8d9b 0.0s done
+#8 exporting config sha256:44bdb6357edd3734eb16b40bb4b28bff7b14de8671ac70464e6759de6794a21b 0.0s done
+#8 exporting attestation manifest sha256:684db0ec246b7a470e8e57f4053c007fd048ec6d4a4f27940cdcc2f282bd0642
+#8 exporting attestation manifest sha256:684db0ec246b7a470e8e57f4053c007fd048ec6d4a4f27940cdcc2f282bd0642 0.0s done
+#8 exporting manifest list sha256:f0767bf21474c114f7d3d23389a5a6f4dfd974dac57b6b8887e9e3438cdcbab0 0.0s done
+#8 naming to docker.io/library/entrega-local:v2 done
+#8 unpacking to docker.io/library/entrega-local:v2 0.0s done
+#8 DONE 0.1s
+[36m$ minikube -p devops-k8s image load entrega-local:v2[0m
+[36m$ python3 scripts/render.py v2 --replicas 3 --output build/deployment.yaml[0m
+[36m$ ./scripts/kube.sh apply -f build/deployment.yaml[0m
+deployment.apps/entrega configured
+[36m$ ./scripts/kube.sh rollout status deployment/entrega --timeout=120s[0m
+Waiting for deployment "entrega" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "entrega" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "entrega" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "entrega" rollout to finish: 1 old replicas are pending termination...
+deployment "entrega" successfully rolled out
+[36m$ ./scripts/kube.sh get pods -l app=entrega[0m
+NAME                       READY   STATUS        RESTARTS   AGE
+entrega-5fff6b6444-vqfnl   1/1     Terminating   0          36s
+entrega-bf76777fc-2xnfr    1/1     Running       0          6s
+entrega-bf76777fc-ch2m6    1/1     Running       0          12s
+entrega-bf76777fc-j495n    1/1     Running       0          20s
+[36m$ ./scripts/kube.sh port-forward service/entrega 8080:80   (em segundo plano)[0m
+[36m$ python3 scripts/smoke.py http://127.0.0.1:8080 --version v2 --message "Entrega configurada pelo grupo." --output evidencias/v2-status.json[0m
+{"version": "v2", "message": "Entrega configurada pelo grupo.", "pod": "entrega-bf76777fc-j495n", "ready": true}
+SMOKE OK
+Revisão verificada da v2 (deployment.kubernetes.io/revision): 3
+[36m$ ./scripts/kube.sh rollout history deployment/entrega[0m
+deployment.apps/entrega 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+3         <none>
+
+
+[32m========================================================================
+  Etapa 7 | Publicar a versão com defeito proposital
+========================================================================[0m
+[36m$ docker build --build-arg APP_VERSION=quebrada -t entrega-local:quebrada .[0m
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 287B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 114B done
+#4 DONE 0.0s
+
+#5 [1/3] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#5 resolve docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2 0.0s done
+#5 DONE 0.0s
+
+#6 [2/3] WORKDIR /app
+#6 CACHED
+
+#7 [3/3] COPY app/main.py /app/main.py
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:665836144f96f2ebcc2e38acf61266f66b6b0c170d63055f753ccc24ae5c4e87 0.0s done
+#8 exporting config sha256:08359e6e03f66629bece480b99c07aa9ed9ec7a8bb7cc239b754720379278ac1 0.0s done
+#8 exporting attestation manifest sha256:2edfaf8cba074469c7ec864337f45f5087f75f1f885ad339168e6d609ed5dae7
+#8 exporting attestation manifest sha256:2edfaf8cba074469c7ec864337f45f5087f75f1f885ad339168e6d609ed5dae7 0.0s done
+#8 exporting manifest list sha256:10109d8c0ec9ba39b2bcb9dbb5fa5b10388defae1a9a60a27d78a200c2f759d2 0.0s done
+#8 naming to docker.io/library/entrega-local:quebrada done
+#8 unpacking to docker.io/library/entrega-local:quebrada done
+#8 DONE 0.1s
+[36m$ minikube -p devops-k8s image load entrega-local:quebrada[0m
+[36m$ python3 scripts/render.py quebrada --replicas 3 --output build/deployment.yaml[0m
+[36m$ ./scripts/kube.sh apply -f build/deployment.yaml[0m
+deployment.apps/entrega configured
+[36m$ ./scripts/kube.sh rollout status deployment/entrega --timeout=30s[0m
+Waiting for deployment "entrega" rollout to finish: 1 out of 3 new replicas have been updated...
+error: timed out waiting for the condition
+[33mResultado previsto: o acompanhamento terminou com timeout. Seguindo para a investigação.[0m
+[36m$ ./scripts/kube.sh get pods -l app=entrega -o wide[0m
+NAME                      READY   STATUS    RESTARTS   AGE   IP            NODE         NOMINATED NODE   READINESS GATES
+entrega-bf76777fc-2xnfr   1/1     Running   0          42s   10.244.0.12   devops-k8s   <none>           <none>
+entrega-bf76777fc-ch2m6   1/1     Running   0          48s   10.244.0.11   devops-k8s   <none>           <none>
+entrega-bf76777fc-j495n   1/1     Running   0          56s   10.244.0.10   devops-k8s   <none>           <none>
+entrega-cb5c65f86-zhqg8   0/1     Running   0          30s   10.244.0.13   devops-k8s   <none>           <none>
+[36m$ ./scripts/kube.sh describe deployment entrega[0m
+Name:                   entrega
+Namespace:              aula-k8s
+CreationTimestamp:      Wed, 21 Oct 2026 11:07:24 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 4
+Selector:               app=entrega
+Replicas:               3 desired | 1 updated | 4 total | 3 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        3
+RollingUpdateStrategy:  0 max unavailable, 1 max surge
+Pod Template:
+  Labels:       app=entrega
+  Annotations:  kubectl.kubernetes.io/restartedAt: 2026-10-21T11:08:39Z
+  Containers:
+   web:
+    Image:      entrega-local:quebrada
+    Port:       8000/TCP (http)
+    Host Port:  0/TCP (http)
+    Limits:
+      cpu:     500m
+      memory:  96Mi
+    Requests:
+      cpu:      100m
+      memory:   32Mi
+    Liveness:   http-get http://:http/healthz delay=0s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Readiness:  http-get http://:http/readyz delay=0s timeout=1s period=2s successThreshold=1 failureThreshold=1
+    Startup:    http-get http://:http/healthz delay=0s timeout=1s period=2s successThreshold=1 failureThreshold=30
+    Environment Variables from:
+      entrega-config  ConfigMap  Optional: false
+    Environment:
+      POD_NAME:     (v1:metadata.name)
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  entrega-5c8cd478b5 (0/0 replicas created), entrega-5fff6b6444 (0/0 replicas created), entrega-bf76777fc (3/3 replicas created)
+NewReplicaSet:   entrega-cb5c65f86 (1/1 replicas created)
+Events:
+  Type    Reason             Age                From                   Message
+  ----    ------             ----               ----                   -------
+  Normal  ScalingReplicaSet  2m33s              deployment-controller  Scaled up replica set entrega-5c8cd478b5 from 0 to 2
+  Normal  ScalingReplicaSet  99s                deployment-controller  Scaled up replica set entrega-5c8cd478b5 from 2 to 3
+  Normal  ScalingReplicaSet  78s                deployment-controller  Scaled up replica set entrega-5fff6b6444 from 0 to 1
+  Normal  ScalingReplicaSet  72s                deployment-controller  Scaled down replica set entrega-5c8cd478b5 from 3 to 2
+  Normal  ScalingReplicaSet  72s                deployment-controller  Scaled up replica set entrega-5fff6b6444 from 1 to 2
+  Normal  ScalingReplicaSet  67s                deployment-controller  Scaled down replica set entrega-5c8cd478b5 from 2 to 1
+  Normal  ScalingReplicaSet  67s                deployment-controller  Scaled up replica set entrega-5fff6b6444 from 2 to 3
+  Normal  ScalingReplicaSet  61s                deployment-controller  Scaled down replica set entrega-5c8cd478b5 from 1 to 0
+  Normal  ScalingReplicaSet  56s                deployment-controller  Scaled up replica set entrega-bf76777fc from 0 to 1
+  Normal  ScalingReplicaSet  30s (x6 over 48s)  deployment-controller  (combined from similar events): Scaled up replica set entrega-cb5c65f86 from 0 to 1
+[36m$ ./scripts/kube.sh get events --sort-by=.lastTimestamp[0m
+LAST SEEN   TYPE      REASON              OBJECT                          MESSAGE
+2m33s       Normal    SuccessfulCreate    replicaset/entrega-5c8cd478b5   Created pod: entrega-5c8cd478b5-csnnj
+2m33s       Normal    SuccessfulCreate    replicaset/entrega-5c8cd478b5   Created pod: entrega-5c8cd478b5-hvtpd
+2m33s       Normal    Scheduled           pod/entrega-5c8cd478b5-csnnj    Successfully assigned aula-k8s/entrega-5c8cd478b5-csnnj to devops-k8s
+2m33s       Normal    Scheduled           pod/entrega-5c8cd478b5-hvtpd    Successfully assigned aula-k8s/entrega-5c8cd478b5-hvtpd to devops-k8s
+2m33s       Normal    ScalingReplicaSet   deployment/entrega              Scaled up replica set entrega-5c8cd478b5 from 0 to 2
+2m32s       Normal    Created             pod/entrega-5c8cd478b5-hvtpd    Container created
+2m32s       Normal    Pulled              pod/entrega-5c8cd478b5-hvtpd    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+2m32s       Normal    Pulled              pod/entrega-5c8cd478b5-csnnj    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+2m31s       Normal    Started             pod/entrega-5c8cd478b5-hvtpd    Container started
+2m31s       Normal    Created             pod/entrega-5c8cd478b5-csnnj    Container created
+2m31s       Normal    Started             pod/entrega-5c8cd478b5-csnnj    Container started
+99s         Normal    Pulled              pod/entrega-5c8cd478b5-7ftfq    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+99s         Normal    SuccessfulCreate    replicaset/entrega-5c8cd478b5   Created pod: entrega-5c8cd478b5-7ftfq
+99s         Normal    Scheduled           pod/entrega-5c8cd478b5-7ftfq    Successfully assigned aula-k8s/entrega-5c8cd478b5-7ftfq to devops-k8s
+99s         Normal    ScalingReplicaSet   deployment/entrega              Scaled up replica set entrega-5c8cd478b5 from 2 to 3
+98s         Normal    Started             pod/entrega-5c8cd478b5-7ftfq    Container started
+98s         Normal    Created             pod/entrega-5c8cd478b5-7ftfq    Container created
+91s         Normal    SuccessfulCreate    replicaset/entrega-5c8cd478b5   Created pod: entrega-5c8cd478b5-gs49k
+91s         Normal    Scheduled           pod/entrega-5c8cd478b5-gs49k    Successfully assigned aula-k8s/entrega-5c8cd478b5-gs49k to devops-k8s
+91s         Normal    Killing             pod/entrega-5c8cd478b5-7ftfq    Stopping container web
+90s         Normal    Pulled              pod/entrega-5c8cd478b5-gs49k    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+90s         Normal    Created             pod/entrega-5c8cd478b5-gs49k    Container created
+89s         Normal    Started             pod/entrega-5c8cd478b5-gs49k    Container started
+78s         Normal    Scheduled           pod/entrega-5fff6b6444-f5n7h    Successfully assigned aula-k8s/entrega-5fff6b6444-f5n7h to devops-k8s
+78s         Normal    SuccessfulCreate    replicaset/entrega-5fff6b6444   Created pod: entrega-5fff6b6444-f5n7h
+78s         Normal    ScalingReplicaSet   deployment/entrega              Scaled up replica set entrega-5fff6b6444 from 0 to 1
+77s         Normal    Started             pod/entrega-5fff6b6444-f5n7h    Container started
+77s         Normal    Created             pod/entrega-5fff6b6444-f5n7h    Container created
+77s         Normal    Pulled              pod/entrega-5fff6b6444-f5n7h    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+72s         Normal    SuccessfulCreate    replicaset/entrega-5fff6b6444   Created pod: entrega-5fff6b6444-vqfnl
+72s         Normal    SuccessfulDelete    replicaset/entrega-5c8cd478b5   Deleted pod: entrega-5c8cd478b5-gs49k
+72s         Normal    ScalingReplicaSet   deployment/entrega              Scaled down replica set entrega-5c8cd478b5 from 3 to 2
+72s         Normal    Killing             pod/entrega-5c8cd478b5-gs49k    Stopping container web
+72s         Normal    ScalingReplicaSet   deployment/entrega              Scaled up replica set entrega-5fff6b6444 from 1 to 2
+72s         Normal    Scheduled           pod/entrega-5fff6b6444-vqfnl    Successfully assigned aula-k8s/entrega-5fff6b6444-vqfnl to devops-k8s
+72s         Normal    Pulled              pod/entrega-5fff6b6444-vqfnl    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+72s         Normal    Created             pod/entrega-5fff6b6444-vqfnl    Container created
+71s         Normal    Started             pod/entrega-5fff6b6444-vqfnl    Container started
+67s         Normal    SuccessfulDelete    replicaset/entrega-5c8cd478b5   Deleted pod: entrega-5c8cd478b5-csnnj
+67s         Normal    Scheduled           pod/entrega-5fff6b6444-zwts7    Successfully assigned aula-k8s/entrega-5fff6b6444-zwts7 to devops-k8s
+67s         Normal    Pulled              pod/entrega-5fff6b6444-zwts7    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+67s         Normal    Created             pod/entrega-5fff6b6444-zwts7    Container created
+67s         Normal    Started             pod/entrega-5fff6b6444-zwts7    Container started
+67s         Normal    ScalingReplicaSet   deployment/entrega              Scaled down replica set entrega-5c8cd478b5 from 2 to 1
+67s         Normal    ScalingReplicaSet   deployment/entrega              Scaled up replica set entrega-5fff6b6444 from 2 to 3
+67s         Warning   Unhealthy           pod/entrega-5c8cd478b5-csnnj    Readiness probe failed: Get "http://10.244.0.4:8000/readyz": read tcp 10.244.0.1:57930->10.244.0.4:8000: read: connection reset by peer
+67s         Normal    SuccessfulCreate    replicaset/entrega-5fff6b6444   Created pod: entrega-5fff6b6444-zwts7
+67s         Normal    Killing             pod/entrega-5c8cd478b5-csnnj    Stopping container web
+61s         Normal    Killing             pod/entrega-5c8cd478b5-hvtpd    Stopping container web
+61s         Normal    ScalingReplicaSet   deployment/entrega              Scaled down replica set entrega-5c8cd478b5 from 1 to 0
+61s         Warning   Unhealthy           pod/entrega-5c8cd478b5-hvtpd    Readiness probe failed: Get "http://10.244.0.3:8000/readyz": write tcp 10.244.0.1:42780->10.244.0.3:8000: write: connection reset by peer
+61s         Normal    SuccessfulDelete    replicaset/entrega-5c8cd478b5   Deleted pod: entrega-5c8cd478b5-hvtpd
+56s         Normal    Scheduled           pod/entrega-bf76777fc-j495n     Successfully assigned aula-k8s/entrega-bf76777fc-j495n to devops-k8s
+56s         Normal    ScalingReplicaSet   deployment/entrega              Scaled up replica set entrega-bf76777fc from 0 to 1
+56s         Normal    SuccessfulCreate    replicaset/entrega-bf76777fc    Created pod: entrega-bf76777fc-j495n
+53s         Normal    Started             pod/entrega-bf76777fc-j495n     Container started
+53s         Normal    Created             pod/entrega-bf76777fc-j495n     Container created
+53s         Normal    Pulled              pod/entrega-bf76777fc-j495n     Container image "entrega-local:v2" already present on machine and can be accessed by the pod
+48s         Normal    Killing             pod/entrega-5fff6b6444-zwts7    Stopping container web
+48s         Normal    SuccessfulDelete    replicaset/entrega-5fff6b6444   Deleted pod: entrega-5fff6b6444-zwts7
+48s         Normal    Created             pod/entrega-bf76777fc-ch2m6     Container created
+48s         Normal    Pulled              pod/entrega-bf76777fc-ch2m6     Container image "entrega-local:v2" already present on machine and can be accessed by the pod
+48s         Normal    Scheduled           pod/entrega-bf76777fc-ch2m6     Successfully assigned aula-k8s/entrega-bf76777fc-ch2m6 to devops-k8s
+48s         Normal    SuccessfulCreate    replicaset/entrega-bf76777fc    Created pod: entrega-bf76777fc-ch2m6
+48s         Normal    Started             pod/entrega-bf76777fc-ch2m6     Container started
+42s         Normal    Scheduled           pod/entrega-bf76777fc-2xnfr     Successfully assigned aula-k8s/entrega-bf76777fc-2xnfr to devops-k8s
+42s         Normal    Pulled              pod/entrega-bf76777fc-2xnfr     Container image "entrega-local:v2" already present on machine and can be accessed by the pod
+42s         Normal    Created             pod/entrega-bf76777fc-2xnfr     Container created
+42s         Normal    Killing             pod/entrega-5fff6b6444-f5n7h    Stopping container web
+42s         Normal    SuccessfulCreate    replicaset/entrega-bf76777fc    Created pod: entrega-bf76777fc-2xnfr
+42s         Normal    SuccessfulDelete    replicaset/entrega-5fff6b6444   Deleted pod: entrega-5fff6b6444-f5n7h
+41s         Normal    Started             pod/entrega-bf76777fc-2xnfr     Container started
+36s         Normal    Killing             pod/entrega-5fff6b6444-vqfnl    Stopping container web
+36s         Normal    SuccessfulDelete    replicaset/entrega-5fff6b6444   Deleted pod: entrega-5fff6b6444-vqfnl
+30s         Normal    SuccessfulCreate    replicaset/entrega-cb5c65f86    Created pod: entrega-cb5c65f86-zhqg8
+30s         Normal    Scheduled           pod/entrega-cb5c65f86-zhqg8     Successfully assigned aula-k8s/entrega-cb5c65f86-zhqg8 to devops-k8s
+30s         Normal    ScalingReplicaSet   deployment/entrega              (combined from similar events): Scaled up replica set entrega-cb5c65f86 from 0 to 1
+28s         Normal    Started             pod/entrega-cb5c65f86-zhqg8     Container started
+28s         Normal    Created             pod/entrega-cb5c65f86-zhqg8     Container created
+28s         Normal    Pulled              pod/entrega-cb5c65f86-zhqg8     Container image "entrega-local:quebrada" already present on machine and can be accessed by the pod
+0s          Warning   Unhealthy           pod/entrega-cb5c65f86-zhqg8     Readiness probe failed: HTTP probe failed with statuscode: 503
+
+[32m========================================================================
+  Etapa 8 | Investigar o Pod defeituoso
+========================================================================[0m
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  31s                default-scheduler  Successfully assigned aula-k8s/entrega-cb5c65f86-zhqg8 to devops-k8s
+  Normal   Pulled     29s                kubelet            spec.containers{web}: Container image "entrega-local:quebrada" already present on machine and can be accessed by the pod
+  Normal   Created    29s                kubelet            spec.containers{web}: Container created
+  Normal   Started    29s                kubelet            spec.containers{web}: Container started
+  Warning  Unhealthy  1s (x14 over 27s)  kubelet            spec.containers{web}: Readiness probe failed: HTTP probe failed with statuscode: 503
+[36m$ ./scripts/kube.sh port-forward pod/entrega-cb5c65f86-zhqg8 8081:8000   (em segundo plano)[0m
+[36m$ curl -i -sS http://127.0.0.1:8081/healthz[0m
+HTTP/1.0 200 OK
+Server: BaseHTTP/0.6 Python/3.12.15
+Date: Wed, 21 Oct 2026 11:09:59 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 15
+Cache-Control: no-store
+
+{"alive": true}
+[36m$ curl -i -sS http://127.0.0.1:8081/readyz[0m
+HTTP/1.0 503 Service Unavailable
+Server: BaseHTTP/0.6 Python/3.12.15
+Date: Wed, 21 Oct 2026 11:09:59 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 16
+Cache-Control: no-store
+
+{"ready": false}
+Aguardando 67 s para o prazo de progresso de 90 s vencer...
+[36m$ ./scripts/kube.sh get pods -l app=entrega -o wide[0m
+NAME                      READY   STATUS    RESTARTS   AGE    IP            NODE         NOMINATED NODE   READINESS GATES
+entrega-bf76777fc-2xnfr   1/1     Running   0          112s   10.244.0.12   devops-k8s   <none>           <none>
+entrega-bf76777fc-ch2m6   1/1     Running   0          118s   10.244.0.11   devops-k8s   <none>           <none>
+entrega-bf76777fc-j495n   1/1     Running   0          2m6s   10.244.0.10   devops-k8s   <none>           <none>
+entrega-cb5c65f86-zhqg8   0/1     Running   0          100s   10.244.0.13   devops-k8s   <none>           <none>
+[36m$ ./scripts/kube.sh describe deployment entrega[0m
+Name:                   entrega
+Namespace:              aula-k8s
+CreationTimestamp:      Wed, 21 Oct 2026 11:07:24 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 4
+Selector:               app=entrega
+Replicas:               3 desired | 1 updated | 4 total | 3 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        3
+RollingUpdateStrategy:  0 max unavailable, 1 max surge
+Pod Template:
+  Labels:       app=entrega
+  Annotations:  kubectl.kubernetes.io/restartedAt: 2026-10-21T11:08:39Z
+  Containers:
+   web:
+    Image:      entrega-local:quebrada
+    Port:       8000/TCP (http)
+    Host Port:  0/TCP (http)
+    Limits:
+      cpu:     500m
+      memory:  96Mi
+    Requests:
+      cpu:      100m
+      memory:   32Mi
+    Liveness:   http-get http://:http/healthz delay=0s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Readiness:  http-get http://:http/readyz delay=0s timeout=1s period=2s successThreshold=1 failureThreshold=1
+    Startup:    http-get http://:http/healthz delay=0s timeout=1s period=2s successThreshold=1 failureThreshold=30
+    Environment Variables from:
+      entrega-config  ConfigMap  Optional: false
+    Environment:
+      POD_NAME:     (v1:metadata.name)
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    False   ProgressDeadlineExceeded
+OldReplicaSets:  entrega-5c8cd478b5 (0/0 replicas created), entrega-5fff6b6444 (0/0 replicas created), entrega-bf76777fc (3/3 replicas created)
+NewReplicaSet:   entrega-cb5c65f86 (1/1 replicas created)
+Events:
+  Type    Reason             Age                  From                   Message
+  ----    ------             ----                 ----                   -------
+  Normal  ScalingReplicaSet  3m43s                deployment-controller  Scaled up replica set entrega-5c8cd478b5 from 0 to 2
+  Normal  ScalingReplicaSet  2m49s                deployment-controller  Scaled up replica set entrega-5c8cd478b5 from 2 to 3
+  Normal  ScalingReplicaSet  2m28s                deployment-controller  Scaled up replica set entrega-5fff6b6444 from 0 to 1
+  Normal  ScalingReplicaSet  2m22s                deployment-controller  Scaled down replica set entrega-5c8cd478b5 from 3 to 2
+  Normal  ScalingReplicaSet  2m22s                deployment-controller  Scaled up replica set entrega-5fff6b6444 from 1 to 2
+  Normal  ScalingReplicaSet  2m17s                deployment-controller  Scaled down replica set entrega-5c8cd478b5 from 2 to 1
+  Normal  ScalingReplicaSet  2m17s                deployment-controller  Scaled up replica set entrega-5fff6b6444 from 2 to 3
+  Normal  ScalingReplicaSet  2m11s                deployment-controller  Scaled down replica set entrega-5c8cd478b5 from 1 to 0
+  Normal  ScalingReplicaSet  2m6s                 deployment-controller  Scaled up replica set entrega-bf76777fc from 0 to 1
+  Normal  ScalingReplicaSet  100s (x6 over 118s)  deployment-controller  (combined from similar events): Scaled up replica set entrega-cb5c65f86 from 0 to 1
+
+[32m========================================================================
+  Etapa 9 | Rollback para a revisão verificada
+========================================================================[0m
+[36m$ ./scripts/kube.sh rollout undo deployment/entrega --to-revision=3[0m
+Warning: resource deployments/entrega was previously managed with 'kubectl apply'. Rolling back will not update the kubectl.kubernetes.io/last-applied-configuration annotation, which may cause unexpected behavior on future 'kubectl apply' operations. Consider using 'kubectl apply' with your previous configuration file instead.
+deployment.apps/entrega rolled back
+[36m$ ./scripts/kube.sh rollout status deployment/entrega --timeout=120s[0m
+deployment "entrega" successfully rolled out
+[36m$ ./scripts/kube.sh get pods -l app=entrega[0m
+NAME                      READY   STATUS        RESTARTS   AGE
+entrega-bf76777fc-2xnfr   1/1     Running       0          113s
+entrega-bf76777fc-ch2m6   1/1     Running       0          119s
+entrega-bf76777fc-j495n   1/1     Running       0          2m7s
+entrega-cb5c65f86-zhqg8   0/1     Terminating   0          101s
+[36m$ ./scripts/kube.sh get deployment entrega -o jsonpath={.spec.template.spec.containers[0].image}[0m
+entrega-local:v2
+
+Imagem do Deployment após o rollback: entrega-local:v2
+build/deployment.yaml ainda pede: image: entrega-local:quebrada
+
+[36m$ python3 scripts/render.py v2 --replicas 3 --output build/deployment.yaml[0m
+[36m$ ./scripts/kube.sh apply -f build/deployment.yaml[0m
+deployment.apps/entrega configured
+[36m$ ./scripts/kube.sh rollout status deployment/entrega --timeout=120s[0m
+deployment "entrega" successfully rolled out
+[36m$ ./scripts/kube.sh rollout history deployment/entrega[0m
+deployment.apps/entrega 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+4         <none>
+5         <none>
+
+[36m$ ./scripts/kube.sh get configmap entrega-config -o yaml[0m
+apiVersion: v1
+data:
+  APP_MESSAGE: Entrega configurada pelo grupo.
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"APP_MESSAGE":"Entrega configurada pelo grupo."},"kind":"ConfigMap","metadata":{"annotations":{},"name":"entrega-config","namespace":"aula-k8s"}}
+  creationTimestamp: "2026-10-21T11:07:23Z"
+  name: entrega-config
+  namespace: aula-k8s
+  resourceVersion: "656"
+  uid: 336dfcfe-b267-46db-b06e-1e847539657a
+[36m$ ./scripts/kube.sh port-forward service/entrega 8080:80   (em segundo plano)[0m
+[36m$ python3 scripts/smoke.py http://127.0.0.1:8080 --version v2 --message "Entrega configurada pelo grupo." --output evidencias/rollback-status.json[0m
+{"version": "v2", "message": "Entrega configurada pelo grupo.", "pod": "entrega-bf76777fc-j495n", "ready": true}
+SMOKE OK
+[36m$ curl -sS -o evidencias/pagina-rollback.html http://127.0.0.1:8080/[0m
+
+[35m  >>> PRINT DO NAVEGADOR (versão v2 recuperada) <<<[0m
+[35m  1. Abra este endereço (Ctrl+clique):[0m
+       https://zany-fishstick-wr6v64pjg6p92g647-8080.app.github.dev
+[35m     Se não abrir, use a aba PORTAS, porta 8080, ícone do globo.[0m
+[35m  2. Tecle Win+Shift+S, capture a página e salve no SEU computador como:[0m
+       Desktop\devops_kubernetes\evidencias\print-rollback.png
+  3. Depois de salvar, pressione Enter aqui para continuar 
+[32m========================================================================
+  Etapa 10 | Pipeline local
+========================================================================[0m
+[36m$ python3 scripts/pipeline_local.py v3 3[0m
++ /usr/bin/docker info
++ /usr/local/bin/minikube -p devops-k8s status
++ /home/codespace/.python/current/bin/python3 -m unittest discover -s tests -v
+test_broken_alive (test_app.AppTests.test_broken_alive) ... pod=p version=quebrada "GET /healthz HTTP/1.1" 200 -
+ok
+test_broken_api (test_app.AppTests.test_broken_api) ... pod=p version=quebrada "GET /api/status HTTP/1.1" 503 -
+ok
+test_broken_readiness (test_app.AppTests.test_broken_readiness) ... pod=p version=quebrada "GET /readyz HTTP/1.1" 503 -
+ok
+test_html_escaping (test_app.AppTests.test_html_escaping) ... pod=<pod> version=v1 "GET / HTTP/1.1" 200 -
+ok
+test_readiness_healthy (test_app.AppTests.test_readiness_healthy) ... pod=p version=v1 "GET /readyz HTTP/1.1" 200 -
+ok
+test_status_v1 (test_app.AppTests.test_status_v1) ... pod=pod-1 version=v1 "GET /api/status HTTP/1.1" 200 -
+ok
+test_status_v2 (test_app.AppTests.test_status_v2) ... pod=pod-2 version=v2 "GET /api/status HTTP/1.1" 200 -
+ok
+test_unknown (test_app.AppTests.test_unknown) ... pod=p version=v1 "GET /inexistente HTTP/1.1" 404 -
+ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.164s
+
+OK
++ /usr/bin/docker build --build-arg APP_VERSION=v3 -t entrega-local:v3 .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 287B done
+#1 DONE 0.0s
+
+#2 [auth] library/python:pull token for registry-1.docker.io
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.12-slim
+#3 DONE 0.2s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 114B done
+#5 DONE 0.0s
+
+#6 [1/3] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#6 resolve docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2 0.0s done
+#6 DONE 0.0s
+
+#7 [2/3] WORKDIR /app
+#7 CACHED
+
+#8 [3/3] COPY app/main.py /app/main.py
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 exporting manifest sha256:f18ca53d1048c3cd00484bb79f1a2c5f287165c8888d54b543f1ea9434e5e03a 0.0s done
+#9 exporting config sha256:75d0b2ff04e4a1002e883b2d0d254d0b6cbf3957c68a4fdfccc2cf6b6cd9d35c 0.0s done
+#9 exporting attestation manifest sha256:0830995788f6c0f95c879291d60c71623f1564a63b09097584875a80a4b23fc3
+#9 exporting attestation manifest sha256:0830995788f6c0f95c879291d60c71623f1564a63b09097584875a80a4b23fc3 0.0s done
+#9 exporting manifest list sha256:19271fa950539afcd3e9a11a938899d6a79407a72a8295767a3c3006c40fa202 0.0s done
+#9 naming to docker.io/library/entrega-local:v3 done
+#9 unpacking to docker.io/library/entrega-local:v3 done
+#9 DONE 0.1s
++ /usr/local/bin/minikube -p devops-k8s image load entrega-local:v3
++ /home/codespace/.python/current/bin/python3 scripts/render.py v3 --replicas 3 --output build/deployment.yaml
++ /usr/local/bin/minikube -p devops-k8s kubectl -- --context=devops-k8s --namespace=aula-k8s apply -f k8s/namespace.yaml
+namespace/aula-k8s unchanged
++ /usr/local/bin/minikube -p devops-k8s kubectl -- --context=devops-k8s --namespace=aula-k8s apply -f k8s/configmap.yaml
+configmap/entrega-config unchanged
++ /usr/local/bin/minikube -p devops-k8s kubectl -- --context=devops-k8s --namespace=aula-k8s apply -f k8s/service.yaml
+service/entrega unchanged
++ /usr/local/bin/minikube -p devops-k8s kubectl -- --context=devops-k8s --namespace=aula-k8s apply -f build/deployment.yaml
+deployment.apps/entrega configured
++ /usr/local/bin/minikube -p devops-k8s kubectl -- --context=devops-k8s --namespace=aula-k8s rollout status deployment/entrega --timeout=120s
+Waiting for deployment "entrega" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "entrega" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "entrega" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "entrega" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "entrega" rollout to finish: 1 old replicas are pending termination...
+deployment "entrega" successfully rolled out
++ /home/codespace/.python/current/bin/python3 scripts/smoke.py http://127.0.0.1:18080 --version v3 --output evidencias/status-v3.json
+{"version": "v3", "message": "Entrega configurada pelo grupo.", "pod": "entrega-5dbc78b858-tj46h", "ready": true}
+SMOKE OK
++ /usr/local/bin/minikube -p devops-k8s kubectl -- --context=devops-k8s --namespace=aula-k8s get pods -l app=entrega -o wide
++ /usr/bin/docker image inspect entrega-local:v3
+Pipeline concluida: v3, replicas=3
+[36m$ ./scripts/kube.sh port-forward service/entrega 8080:80   (em segundo plano)[0m
+[36m$ curl -sS http://127.0.0.1:8080/api/status[0m
+{"version": "v3", "message": "Entrega configurada pelo grupo.", "pod": "entrega-5dbc78b858-tj46h", "ready": true}
+[36m$ curl -sS -o evidencias/pagina-v3.html http://127.0.0.1:8080/[0m
+
+[35m  >>> PRINT DO NAVEGADOR (versão v3 publicada pela pipeline) <<<[0m
+[35m  1. Abra este endereço (Ctrl+clique):[0m
+       https://zany-fishstick-wr6v64pjg6p92g647-8080.app.github.dev
+[35m     Se não abrir, use a aba PORTAS, porta 8080, ícone do globo.[0m
+[35m  2. Tecle Win+Shift+S, capture a página e salve no SEU computador como:[0m
+       Desktop\devops_kubernetes\evidencias\print-v3.png
+  3. Depois de salvar, pressione Enter aqui para continuar 
+[32m========================================================================
+  Etapa 13 | Estado final
+========================================================================[0m
+NAME                       READY   STATUS    RESTARTS   AGE   IP            NODE         NOMINATED NODE   READINESS GATES
+entrega-5dbc78b858-592s4   1/1     Running   0          50s   10.244.0.15   devops-k8s   <none>           <none>
+entrega-5dbc78b858-hklqj   1/1     Running   0          44s   10.244.0.16   devops-k8s   <none>           <none>
+entrega-5dbc78b858-tj46h   1/1     Running   0          57s   10.244.0.14   devops-k8s   <none>           <none>
+
+[32m========================================================================
+  CONCLUÍDO
+========================================================================[0m
+Resumo da execução - 21/10/2026 11:12
+Duração: 7 min
+
+Pod excluído: entrega-5c8cd478b5-7ftfq
+Pod criado no lugar: entrega-5c8cd478b5-gs49k
+Revisão verificada da v2: 3
+Pod da versão quebrada: entrega-cb5c65f86-zhqg8
+Imagem após o rollback: entrega-local:v2
+Versão publicada pela pipeline: v3 com 3 réplicas
+
+[32mTodas as evidências estão em evidencias/.[0m
+[32mPacote para baixar: entrega-atividade-kubernetes.zip[0m
+  (no painel de arquivos à esquerda: botão direito > Download)

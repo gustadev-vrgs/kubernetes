@@ -1,0 +1,8 @@
+$ ./scripts/kube.sh get pods -l app=entrega -o wide
+NAME                      READY   STATUS    RESTARTS   AGE   IP            NODE         NOMINATED NODE   READINESS GATES
+entrega-bf76777fc-2xnfr   1/1     Running   0          42s   10.244.0.12   devops-k8s   <none>           <none>
+entrega-bf76777fc-ch2m6   1/1     Running   0          48s   10.244.0.11   devops-k8s   <none>           <none>
+entrega-bf76777fc-j495n   1/1     Running   0          56s   10.244.0.10   devops-k8s   <none>           <none>
+entrega-cb5c65f86-zhqg8   0/1     Running   0          30s   10.244.0.13   devops-k8s   <none>           <none>
+[código de saída: 0]
+

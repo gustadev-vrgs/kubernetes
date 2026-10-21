@@ -1,0 +1,85 @@
+$ ./scripts/kube.sh get events --sort-by=.lastTimestamp
+LAST SEEN   TYPE      REASON              OBJECT                          MESSAGE
+2m33s       Normal    SuccessfulCreate    replicaset/entrega-5c8cd478b5   Created pod: entrega-5c8cd478b5-csnnj
+2m33s       Normal    SuccessfulCreate    replicaset/entrega-5c8cd478b5   Created pod: entrega-5c8cd478b5-hvtpd
+2m33s       Normal    Scheduled           pod/entrega-5c8cd478b5-csnnj    Successfully assigned aula-k8s/entrega-5c8cd478b5-csnnj to devops-k8s
+2m33s       Normal    Scheduled           pod/entrega-5c8cd478b5-hvtpd    Successfully assigned aula-k8s/entrega-5c8cd478b5-hvtpd to devops-k8s
+2m33s       Normal    ScalingReplicaSet   deployment/entrega              Scaled up replica set entrega-5c8cd478b5 from 0 to 2
+2m32s       Normal    Created             pod/entrega-5c8cd478b5-hvtpd    Container created
+2m32s       Normal    Pulled              pod/entrega-5c8cd478b5-hvtpd    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+2m32s       Normal    Pulled              pod/entrega-5c8cd478b5-csnnj    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+2m31s       Normal    Started             pod/entrega-5c8cd478b5-hvtpd    Container started
+2m31s       Normal    Created             pod/entrega-5c8cd478b5-csnnj    Container created
+2m31s       Normal    Started             pod/entrega-5c8cd478b5-csnnj    Container started
+99s         Normal    Pulled              pod/entrega-5c8cd478b5-7ftfq    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+99s         Normal    SuccessfulCreate    replicaset/entrega-5c8cd478b5   Created pod: entrega-5c8cd478b5-7ftfq
+99s         Normal    Scheduled           pod/entrega-5c8cd478b5-7ftfq    Successfully assigned aula-k8s/entrega-5c8cd478b5-7ftfq to devops-k8s
+99s         Normal    ScalingReplicaSet   deployment/entrega              Scaled up replica set entrega-5c8cd478b5 from 2 to 3
+98s         Normal    Started             pod/entrega-5c8cd478b5-7ftfq    Container started
+98s         Normal    Created             pod/entrega-5c8cd478b5-7ftfq    Container created
+91s         Normal    SuccessfulCreate    replicaset/entrega-5c8cd478b5   Created pod: entrega-5c8cd478b5-gs49k
+91s         Normal    Scheduled           pod/entrega-5c8cd478b5-gs49k    Successfully assigned aula-k8s/entrega-5c8cd478b5-gs49k to devops-k8s
+91s         Normal    Killing             pod/entrega-5c8cd478b5-7ftfq    Stopping container web
+90s         Normal    Pulled              pod/entrega-5c8cd478b5-gs49k    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+90s         Normal    Created             pod/entrega-5c8cd478b5-gs49k    Container created
+89s         Normal    Started             pod/entrega-5c8cd478b5-gs49k    Container started
+78s         Normal    Scheduled           pod/entrega-5fff6b6444-f5n7h    Successfully assigned aula-k8s/entrega-5fff6b6444-f5n7h to devops-k8s
+78s         Normal    SuccessfulCreate    replicaset/entrega-5fff6b6444   Created pod: entrega-5fff6b6444-f5n7h
+78s         Normal    ScalingReplicaSet   deployment/entrega              Scaled up replica set entrega-5fff6b6444 from 0 to 1
+77s         Normal    Started             pod/entrega-5fff6b6444-f5n7h    Container started
+77s         Normal    Created             pod/entrega-5fff6b6444-f5n7h    Container created
+77s         Normal    Pulled              pod/entrega-5fff6b6444-f5n7h    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+72s         Normal    SuccessfulCreate    replicaset/entrega-5fff6b6444   Created pod: entrega-5fff6b6444-vqfnl
+72s         Normal    SuccessfulDelete    replicaset/entrega-5c8cd478b5   Deleted pod: entrega-5c8cd478b5-gs49k
+72s         Normal    ScalingReplicaSet   deployment/entrega              Scaled down replica set entrega-5c8cd478b5 from 3 to 2
+72s         Normal    Killing             pod/entrega-5c8cd478b5-gs49k    Stopping container web
+72s         Normal    ScalingReplicaSet   deployment/entrega              Scaled up replica set entrega-5fff6b6444 from 1 to 2
+72s         Normal    Scheduled           pod/entrega-5fff6b6444-vqfnl    Successfully assigned aula-k8s/entrega-5fff6b6444-vqfnl to devops-k8s
+72s         Normal    Pulled              pod/entrega-5fff6b6444-vqfnl    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+72s         Normal    Created             pod/entrega-5fff6b6444-vqfnl    Container created
+71s         Normal    Started             pod/entrega-5fff6b6444-vqfnl    Container started
+67s         Normal    SuccessfulDelete    replicaset/entrega-5c8cd478b5   Deleted pod: entrega-5c8cd478b5-csnnj
+67s         Normal    Scheduled           pod/entrega-5fff6b6444-zwts7    Successfully assigned aula-k8s/entrega-5fff6b6444-zwts7 to devops-k8s
+67s         Normal    Pulled              pod/entrega-5fff6b6444-zwts7    Container image "entrega-local:v1" already present on machine and can be accessed by the pod
+67s         Normal    Created             pod/entrega-5fff6b6444-zwts7    Container created
+67s         Normal    Started             pod/entrega-5fff6b6444-zwts7    Container started
+67s         Normal    ScalingReplicaSet   deployment/entrega              Scaled down replica set entrega-5c8cd478b5 from 2 to 1
+67s         Normal    ScalingReplicaSet   deployment/entrega              Scaled up replica set entrega-5fff6b6444 from 2 to 3
+67s         Warning   Unhealthy           pod/entrega-5c8cd478b5-csnnj    Readiness probe failed: Get "http://10.244.0.4:8000/readyz": read tcp 10.244.0.1:57930->10.244.0.4:8000: read: connection reset by peer
+67s         Normal    SuccessfulCreate    replicaset/entrega-5fff6b6444   Created pod: entrega-5fff6b6444-zwts7
+67s         Normal    Killing             pod/entrega-5c8cd478b5-csnnj    Stopping container web
+61s         Normal    Killing             pod/entrega-5c8cd478b5-hvtpd    Stopping container web
+61s         Normal    ScalingReplicaSet   deployment/entrega              Scaled down replica set entrega-5c8cd478b5 from 1 to 0
+61s         Warning   Unhealthy           pod/entrega-5c8cd478b5-hvtpd    Readiness probe failed: Get "http://10.244.0.3:8000/readyz": write tcp 10.244.0.1:42780->10.244.0.3:8000: write: connection reset by peer
+61s         Normal    SuccessfulDelete    replicaset/entrega-5c8cd478b5   Deleted pod: entrega-5c8cd478b5-hvtpd
+56s         Normal    Scheduled           pod/entrega-bf76777fc-j495n     Successfully assigned aula-k8s/entrega-bf76777fc-j495n to devops-k8s
+56s         Normal    ScalingReplicaSet   deployment/entrega              Scaled up replica set entrega-bf76777fc from 0 to 1
+56s         Normal    SuccessfulCreate    replicaset/entrega-bf76777fc    Created pod: entrega-bf76777fc-j495n
+53s         Normal    Started             pod/entrega-bf76777fc-j495n     Container started
+53s         Normal    Created             pod/entrega-bf76777fc-j495n     Container created
+53s         Normal    Pulled              pod/entrega-bf76777fc-j495n     Container image "entrega-local:v2" already present on machine and can be accessed by the pod
+48s         Normal    Killing             pod/entrega-5fff6b6444-zwts7    Stopping container web
+48s         Normal    SuccessfulDelete    replicaset/entrega-5fff6b6444   Deleted pod: entrega-5fff6b6444-zwts7
+48s         Normal    Created             pod/entrega-bf76777fc-ch2m6     Container created
+48s         Normal    Pulled              pod/entrega-bf76777fc-ch2m6     Container image "entrega-local:v2" already present on machine and can be accessed by the pod
+48s         Normal    Scheduled           pod/entrega-bf76777fc-ch2m6     Successfully assigned aula-k8s/entrega-bf76777fc-ch2m6 to devops-k8s
+48s         Normal    SuccessfulCreate    replicaset/entrega-bf76777fc    Created pod: entrega-bf76777fc-ch2m6
+48s         Normal    Started             pod/entrega-bf76777fc-ch2m6     Container started
+42s         Normal    Scheduled           pod/entrega-bf76777fc-2xnfr     Successfully assigned aula-k8s/entrega-bf76777fc-2xnfr to devops-k8s
+42s         Normal    Pulled              pod/entrega-bf76777fc-2xnfr     Container image "entrega-local:v2" already present on machine and can be accessed by the pod
+42s         Normal    Created             pod/entrega-bf76777fc-2xnfr     Container created
+42s         Normal    Killing             pod/entrega-5fff6b6444-f5n7h    Stopping container web
+42s         Normal    SuccessfulCreate    replicaset/entrega-bf76777fc    Created pod: entrega-bf76777fc-2xnfr
+42s         Normal    SuccessfulDelete    replicaset/entrega-5fff6b6444   Deleted pod: entrega-5fff6b6444-f5n7h
+41s         Normal    Started             pod/entrega-bf76777fc-2xnfr     Container started
+36s         Normal    Killing             pod/entrega-5fff6b6444-vqfnl    Stopping container web
+36s         Normal    SuccessfulDelete    replicaset/entrega-5fff6b6444   Deleted pod: entrega-5fff6b6444-vqfnl
+30s         Normal    SuccessfulCreate    replicaset/entrega-cb5c65f86    Created pod: entrega-cb5c65f86-zhqg8
+30s         Normal    Scheduled           pod/entrega-cb5c65f86-zhqg8     Successfully assigned aula-k8s/entrega-cb5c65f86-zhqg8 to devops-k8s
+30s         Normal    ScalingReplicaSet   deployment/entrega              (combined from similar events): Scaled up replica set entrega-cb5c65f86 from 0 to 1
+28s         Normal    Started             pod/entrega-cb5c65f86-zhqg8     Container started
+28s         Normal    Created             pod/entrega-cb5c65f86-zhqg8     Container created
+28s         Normal    Pulled              pod/entrega-cb5c65f86-zhqg8     Container image "entrega-local:quebrada" already present on machine and can be accessed by the pod
+0s          Warning   Unhealthy           pod/entrega-cb5c65f86-zhqg8     Readiness probe failed: HTTP probe failed with statuscode: 503
+[código de saída: 0]
+

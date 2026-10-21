@@ -1,0 +1,43 @@
+$ docker build --build-arg APP_VERSION=quebrada -t entrega-local:quebrada .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 287B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 114B done
+#4 DONE 0.0s
+
+#5 [1/3] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#5 resolve docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2 0.0s done
+#5 DONE 0.0s
+
+#6 [2/3] WORKDIR /app
+#6 CACHED
+
+#7 [3/3] COPY app/main.py /app/main.py
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:665836144f96f2ebcc2e38acf61266f66b6b0c170d63055f753ccc24ae5c4e87 0.0s done
+#8 exporting config sha256:08359e6e03f66629bece480b99c07aa9ed9ec7a8bb7cc239b754720379278ac1 0.0s done
+#8 exporting attestation manifest sha256:2edfaf8cba074469c7ec864337f45f5087f75f1f885ad339168e6d609ed5dae7
+#8 exporting attestation manifest sha256:2edfaf8cba074469c7ec864337f45f5087f75f1f885ad339168e6d609ed5dae7 0.0s done
+#8 exporting manifest list sha256:10109d8c0ec9ba39b2bcb9dbb5fa5b10388defae1a9a60a27d78a200c2f759d2 0.0s done
+#8 naming to docker.io/library/entrega-local:quebrada done
+#8 unpacking to docker.io/library/entrega-local:quebrada done
+#8 DONE 0.1s
+[código de saída: 0]
+
+$ minikube -p devops-k8s image load entrega-local:quebrada
+[código de saída: 0]
+

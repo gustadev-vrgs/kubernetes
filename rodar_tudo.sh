@@ -207,7 +207,7 @@ must 01-versoes.txt python3 --version
 must 01-versoes.txt docker version --format 'Docker cliente {{.Client.Version}} / servidor {{.Server.Version}}'
 must 01-versoes.txt minikube version
 run  01-versoes.txt bash -c '. /etc/os-release; echo "Sistema: $PRETTY_NAME"'
-must 01-minikube-start.txt minikube -p devops-k8s start --driver=docker --cpus=2 --memory=2048
+must 01-minikube-start.txt minikube -p devops-k8s start --driver=docker --cpus=2 --memory=2048 --container-runtime=docker
 must 01-nodes.txt ./scripts/kube.sh wait --for=condition=Ready node --all --timeout=180s
 must 01-nodes.txt ./scripts/kube.sh get nodes -o wide
 must 01-versoes.txt ./scripts/kube.sh version

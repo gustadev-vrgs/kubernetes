@@ -1,0 +1,11 @@
+$ python3 scripts/render.py v2 --replicas 3 --output build/deployment.yaml
+[código de saída: 0]
+
+$ ./scripts/kube.sh apply -f build/deployment.yaml
+deployment.apps/entrega configured
+[código de saída: 0]
+
+$ ./scripts/kube.sh rollout status deployment/entrega --timeout=120s
+deployment "entrega" successfully rolled out
+[código de saída: 0]
+

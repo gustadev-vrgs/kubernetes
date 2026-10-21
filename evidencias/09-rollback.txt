@@ -1,0 +1,24 @@
+$ ./scripts/kube.sh rollout undo deployment/entrega --to-revision=3
+Warning: resource deployments/entrega was previously managed with 'kubectl apply'. Rolling back will not update the kubectl.kubernetes.io/last-applied-configuration annotation, which may cause unexpected behavior on future 'kubectl apply' operations. Consider using 'kubectl apply' with your previous configuration file instead.
+deployment.apps/entrega rolled back
+[código de saída: 0]
+
+$ ./scripts/kube.sh rollout status deployment/entrega --timeout=120s
+deployment "entrega" successfully rolled out
+[código de saída: 0]
+
+$ ./scripts/kube.sh get pods -l app=entrega
+NAME                      READY   STATUS        RESTARTS   AGE
+entrega-bf76777fc-2xnfr   1/1     Running       0          113s
+entrega-bf76777fc-ch2m6   1/1     Running       0          119s
+entrega-bf76777fc-j495n   1/1     Running       0          2m7s
+entrega-cb5c65f86-zhqg8   0/1     Terminating   0          101s
+[código de saída: 0]
+
+$ ./scripts/kube.sh get deployment entrega -o jsonpath={.spec.template.spec.containers[0].image}
+entrega-local:v2[código de saída: 0]
+
+
+Imagem do Deployment após o rollback: entrega-local:v2
+build/deployment.yaml ainda pede: image: entrega-local:quebrada
+

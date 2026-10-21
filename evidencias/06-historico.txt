@@ -1,0 +1,10 @@
+Revisão verificada da v2 (deployment.kubernetes.io/revision): 3
+$ ./scripts/kube.sh rollout history deployment/entrega
+deployment.apps/entrega 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+3         <none>
+
+[código de saída: 0]
+

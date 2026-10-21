@@ -1,0 +1,5 @@
+$ python3 scripts/smoke.py http://127.0.0.1:8080 --version v2 --message "Entrega configurada pelo grupo." --output evidencias/v2-status.json
+{"version": "v2", "message": "Entrega configurada pelo grupo.", "pod": "entrega-bf76777fc-j495n", "ready": true}
+SMOKE OK
+[código de saída: 0]
+

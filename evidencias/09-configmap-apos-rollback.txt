@@ -1,0 +1,16 @@
+$ ./scripts/kube.sh get configmap entrega-config -o yaml
+apiVersion: v1
+data:
+  APP_MESSAGE: Entrega configurada pelo grupo.
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"APP_MESSAGE":"Entrega configurada pelo grupo."},"kind":"ConfigMap","metadata":{"annotations":{},"name":"entrega-config","namespace":"aula-k8s"}}
+  creationTimestamp: "2026-10-21T11:07:23Z"
+  name: entrega-config
+  namespace: aula-k8s
+  resourceVersion: "656"
+  uid: 336dfcfe-b267-46db-b06e-1e847539657a
+[código de saída: 0]
+

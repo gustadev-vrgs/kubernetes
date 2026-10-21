@@ -4,4 +4,4 @@ metadata:
   name: entrega-config
   namespace: aula-k8s
 data:
-  APP_MESSAGE: "Entrega v1 publicada pelo grupo."
+  APP_MESSAGE: "Entrega configurada pelo grupo."

@@ -1,0 +1,20 @@
+$ python3 scripts/render.py v1 --replicas 3 --output build/deployment.yaml
+[código de saída: 0]
+
+$ ./scripts/kube.sh apply -f build/deployment.yaml
+deployment.apps/entrega configured
+[código de saída: 0]
+
+$ ./scripts/kube.sh rollout status deployment/entrega --timeout=120s
+Waiting for deployment "entrega" rollout to finish: 2 of 3 updated replicas are available...
+Waiting for deployment "entrega" rollout to finish: 2 of 3 updated replicas are available...
+deployment "entrega" successfully rolled out
+[código de saída: 0]
+
+$ ./scripts/kube.sh get pods -l app=entrega
+NAME                       READY   STATUS    RESTARTS   AGE
+entrega-5c8cd478b5-7ftfq   1/1     Running   0          5s
+entrega-5c8cd478b5-csnnj   1/1     Running   0          59s
+entrega-5c8cd478b5-hvtpd   1/1     Running   0          59s
+[código de saída: 0]
+

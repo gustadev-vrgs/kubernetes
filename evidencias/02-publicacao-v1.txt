@@ -1,0 +1,30 @@
+$ ./scripts/kube.sh apply -f k8s/namespace.yaml
+namespace/aula-k8s created
+[código de saída: 0]
+
+$ ./scripts/kube.sh apply -f k8s/configmap.yaml
+configmap/entrega-config created
+[código de saída: 0]
+
+$ ./scripts/kube.sh apply -f k8s/service.yaml
+service/entrega created
+[código de saída: 0]
+
+$ python3 scripts/render.py v1 --replicas 2 --output build/deployment.yaml
+[código de saída: 0]
+
+$ ./scripts/kube.sh apply --dry-run=server -f build/deployment.yaml
+deployment.apps/entrega created (server dry run)
+[código de saída: 0]
+
+$ ./scripts/kube.sh apply -f build/deployment.yaml
+deployment.apps/entrega created
+[código de saída: 0]
+
+$ ./scripts/kube.sh rollout status deployment/entrega --timeout=120s
+Waiting for deployment "entrega" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "entrega" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "entrega" rollout to finish: 0 of 2 updated replicas are available...
+deployment "entrega" successfully rolled out
+[código de saída: 0]
+

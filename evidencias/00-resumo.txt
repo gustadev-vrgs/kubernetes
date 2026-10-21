@@ -1,0 +1,9 @@
+Resumo da execução - 21/10/2026 11:12
+Duração: 7 min
+
+Pod excluído: entrega-5c8cd478b5-7ftfq
+Pod criado no lugar: entrega-5c8cd478b5-gs49k
+Revisão verificada da v2: 3
+Pod da versão quebrada: entrega-cb5c65f86-zhqg8
+Imagem após o rollback: entrega-local:v2
+Versão publicada pela pipeline: v3 com 3 réplicas

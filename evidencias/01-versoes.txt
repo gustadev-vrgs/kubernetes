@@ -15,3 +15,9 @@ $ bash -c ". /etc/os-release; echo "Sistema: $PRETTY_NAME""
 Sistema: Ubuntu 24.04.5 LTS
 [código de saída: 0]
 
+$ ./scripts/kube.sh version
+Client Version: v1.37.0
+Kustomize Version: v5.8.1
+Server Version: v1.37.0
+[código de saída: 0]
+

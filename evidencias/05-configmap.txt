@@ -1,0 +1,13 @@
+Conteúdo de k8s/configmap.yaml após a edição:
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: entrega-config
+  namespace: aula-k8s
+data:
+  APP_MESSAGE: "Entrega configurada pelo grupo."
+
+$ ./scripts/kube.sh apply -f k8s/configmap.yaml
+configmap/entrega-config configured
+[código de saída: 0]
+

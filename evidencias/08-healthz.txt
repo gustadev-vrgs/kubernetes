@@ -1,0 +1,10 @@
+$ curl -i -sS http://127.0.0.1:8081/healthz
+HTTP/1.0 200 OK
+Server: BaseHTTP/0.6 Python/3.12.15
+Date: Wed, 21 Oct 2026 11:09:59 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 15
+Cache-Control: no-store
+
+{"alive": true}[código de saída: 0]
+
