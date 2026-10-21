@@ -1,0 +1,4 @@
+$ ./scripts/kube.sh wait --for=condition=Ready node --all --timeout=180s
+error: timed out waiting for the condition on nodes/devops-k8s
+[código de saída: 1]
+

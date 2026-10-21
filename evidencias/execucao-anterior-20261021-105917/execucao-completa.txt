@@ -1,0 +1,38 @@
+
+[32m========================================================================
+  Preparando o ambiente
+========================================================================[0m
+OK
+
+[32m========================================================================
+  Etapa 1 | Conferência inicial
+========================================================================[0m
+[36m$ python3 --version[0m
+Python 3.14.2
+[36m$ docker version --format "Docker cliente {{.Client.Version}} / servidor {{.Server.Version}}"[0m
+Docker cliente 29.8.0-1 / servidor 29.8.0-1
+[36m$ minikube version[0m
+minikube version: v1.39.0
+commit: 7a9f6a841470a207de8cf4bafcccee0969d8ba10
+[36m$ bash -c ". /etc/os-release; echo "Sistema: $PRETTY_NAME""[0m
+Sistema: Ubuntu 24.04.5 LTS
+[36m$ minikube -p devops-k8s start --driver=docker --cpus=2 --memory=2048[0m
+* [devops-k8s] minikube v1.39.0 on Ubuntu 24.04 (docker/amd64)
+* Using the docker driver based on user configuration
+* Using Docker driver with root privileges
+* Starting "devops-k8s" primary control-plane node in "devops-k8s" cluster
+* Pulling base image v0.0.51 ...
+* Downloading Kubernetes v1.37.0 preload ...
+    > gcr.io/k8s-minikube/kicbase:  1.60 KiB / 507.61 MiB [>____] 0.00% ? p/s ?    > gcr.io/k8s-minikube/kicbase:  33.75 KiB / 507.61 MiB [>___] 0.01% ? p/s ?    > gcr.io/k8s-minikube/kicbase:  14.96 MiB / 507.61 MiB [>___] 2.95% ? p/s ?    > gcr.io/k8s-minikube/kicbase:  30.08 MiB / 507.61 MiB  5.93% 50.13 MiB p/s    > gcr.io/k8s-minikube/kicbase:  51.53 MiB / 507.61 MiB  10.15% 50.13 MiB p/    > gcr.io/k8s-minikube/kicbase:  74.66 MiB / 507.61 MiB  14.71% 50.13 MiB p/    > gcr.io/k8s-minikube/kicbase:  96.47 MiB / 507.61 MiB  19.01% 53.97 MiB p/    > gcr.io/k8s-minikube/kicbase:  112.03 MiB / 507.61 MiB  22.07% 53.97 MiB p    > gcr.io/k8s-minikube/kicbase:  130.32 MiB / 507.61 MiB  25.67% 53.97 MiB p    > gcr.io/k8s-minikube/kicbase:  140.82 MiB / 507.61 MiB  27.74% 55.26 MiB p    > gcr.io/k8s-minikube/kicbase:  148.28 MiB / 507.61 MiB  29.21% 55.26 MiB p    > gcr.io/k8s-minikube/kicbase:  162.53 MiB / 507.61 MiB  32.02% 55.26 MiB p    > gcr.io/k8s-minikube/kicbase:  173.53 MiB / 507.61 MiB  34.19% 55.25 MiB p    > gcr.io/k8s-minikube/kicbase:  193.53 MiB / 507.61 MiB  38.13% 55.25 MiB p    > gcr.io/k8s-minikube/kicbase:  208.35 MiB / 507.61 MiB  41.05% 55.25 MiB p    > gcr.io/k8s-minikube/kicbase:  213.25 MiB / 507.61 MiB  42.01% 55.95 MiB p    > gcr.io/k8s-minikube/kicbase:  223.57 MiB / 507.61 MiB  44.04% 55.95 MiB p    > gcr.io/k8s-minikube/kicbase:  232.03 MiB / 507.61 MiB  45.71% 55.95 MiB p    > gcr.io/k8s-minikube/kicbase:  241.47 MiB / 507.61 MiB  47.57% 55.28 MiB p    > gcr.io/k8s-minikube/kicbase:  249.60 MiB / 507.61 MiB  49.17% 55.28 MiB p    > gcr.io/k8s-minikube/kicbase:  266.47 MiB / 507.61 MiB  52.50% 55.28 MiB p    > gcr.io/k8s-minikube/kicbase:  281.57 MiB / 507.61 MiB  55.47% 56.07 MiB p    > gcr.io/k8s-minikube/kicbase:  302.63 MiB / 507.61 MiB  59.62% 56.07 MiB p    > gcr.io/k8s-minikube/kicbase:  325.13 MiB / 507.61 MiB  64.05% 56.07 MiB p    > gcr.io/k8s-minikube/kicbase:  351.38 MiB / 507.61 MiB  69.22% 60.12 MiB p    > gcr.io/k8s-minikube/kicbase:  380.52 MiB / 507.61 MiB  74.96% 60.12 MiB p    > gcr.io/k8s-minikube/kicbase:  403.24 MiB / 507.61 MiB  79.44% 60.12 MiB p    > gcr.io/k8s-minikube/kicbase:  438.61 MiB / 507.61 MiB  86.41% 65.62 MiB p    > gcr.io/k8s-minikube/kicbase:  462.74 MiB / 507.61 MiB  91.16% 65.62 MiB p    > gcr.io/k8s-minikube/kicbase:  488.02 MiB / 507.61 MiB  96.14% 65.62 MiB p    > gcr.io/k8s-minikube/kicbase:  507.49 MiB / 507.61 MiB  99.98% 84.99 MiB p! Failing to connect to https://registry.k8s.io/ from inside the minikube container
+* To pull new external images, you may need to configure a proxy: https://minikube.sigs.k8s.io/docs/reference/networking/proxy/
+* Preparing Kubernetes v1.37.0 on containerd 2.3.4 ...
+* Configuring CNI (Container Networking Interface) ...
+* Verifying Kubernetes components...
+  - Using image gcr.io/k8s-minikube/storage-provisioner:v5
+* Enabled addons: storage-provisioner, default-storageclass
+* Done! kubectl is now configured to use "devops-k8s" cluster and "default" namespace by default
+[36m$ ./scripts/kube.sh wait --for=condition=Ready node --all --timeout=180s[0m
+error: timed out waiting for the condition on nodes/devops-k8s
+
+[31mERRO: O comando falhou (código 1): ./scripts/kube.sh wait --for=condition=Ready node --all --timeout=180s[0m
+[31mOs registros até aqui estão em evidencias/. Mande a pasta para análise.[0m

@@ -1,0 +1,2 @@
+2026-10-21 10:59:17
+O comando falhou (código 1): ./scripts/kube.sh wait --for=condition=Ready node --all --timeout=180s
