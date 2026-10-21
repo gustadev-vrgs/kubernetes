@@ -1,0 +1,11 @@
+FROM python:3.12-slim
+ARG APP_VERSION=v1
+ENV APP_VERSION=${APP_VERSION} \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT=8000
+WORKDIR /app
+COPY app/main.py /app/main.py
+USER 10001:10001
+EXPOSE 8000
+CMD ["python", "/app/main.py"]

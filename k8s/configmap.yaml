@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: entrega-config
+  namespace: aula-k8s
+data:
+  APP_MESSAGE: "Entrega v1 publicada pelo grupo."
